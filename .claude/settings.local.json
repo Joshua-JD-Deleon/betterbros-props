@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 install:*)",
+      "Bash(source:*)",
+      "Bash(streamlit --version)",
+      "Bash(streamlit run:*)",
+      "Bash(python3 -m streamlit run:*)",
+      "Bash(STREAMLIT_EMAIL=\"\" python3 -m streamlit run:*)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
