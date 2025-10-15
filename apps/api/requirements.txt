@@ -1,0 +1,63 @@
+# FastAPI and Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Pydantic
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Database
+sqlalchemy[asyncio]==2.0.25
+asyncpg==0.29.0
+alembic==1.13.1
+
+# Redis
+redis[hiredis]==5.0.1
+
+# Authentication
+pyjwt[crypto]==2.8.0
+cryptography==42.0.0
+
+# HTTP Client
+httpx==0.26.0
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.3
+scipy==1.11.4
+
+# ML Libraries
+scikit-learn==1.4.0
+xgboost==2.0.3
+lightgbm==4.2.0
+
+# Bayesian Modeling (optional - graceful fallback if not installed)
+# pymc==5.10.0
+# arviz==0.17.0
+
+# Interpretability
+shap==0.44.0
+
+# Correlation & Copulas
+copulas==0.10.1
+
+# Visualization (optional)
+matplotlib==3.8.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2023.3
+python-dotenv==1.0.0
+
+# Monitoring (optional)
+# sentry-sdk[fastapi]==1.39.2
+
+# Background Tasks (optional)
+# celery[redis]==5.3.4
+
+# Development
+pytest==7.4.4
+pytest-asyncio==0.23.3
+black==23.12.1
+ruff==0.1.11

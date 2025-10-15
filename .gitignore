@@ -67,3 +67,28 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Node.js / Next.js / Mobile
+node_modules/
+.pnp
+.pnp.js
+.next/
+out/
+.expo/
+.expo-shared/
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
+
+# Turbo
+.turbo
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Misc
+*.pem

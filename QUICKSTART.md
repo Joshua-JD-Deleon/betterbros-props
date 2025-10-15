@@ -16,7 +16,7 @@ make run
 
 # Option 2: Direct
 streamlit run app/main.py
-```
+```f
 
 ### CLI Usage
 ```bash
