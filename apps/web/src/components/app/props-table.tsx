@@ -14,6 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useSlipStore } from '@/lib/store/slip-store';
+import { useUIStore } from '@/lib/store/ui-store';
 import { formatOdds, formatEV } from '@/lib/utils';
 import { mockProps, type MockProp } from '@/lib/mock-data';
 import type { Sport, StatCategory } from '@/lib/types/stats';
@@ -91,6 +92,8 @@ export function PropsTable({ showFilters = true }: PropsTableProps) {
         startTime: prop.game_time,
       },
     });
+    // Open the drawer to show the added prop
+    useUIStore.getState().openDrawer();
   };
 
   return (
