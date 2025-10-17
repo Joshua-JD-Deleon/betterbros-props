@@ -1,39 +1,24 @@
 'use client';
 
-import { TrendingUp, TrendingDown, Zap, Target } from 'lucide-react';
+import { TrendingUp, Zap, Target, Activity } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { mockTrendingProps } from '@/lib/mock-data';
 
-const trends = [
-  {
-    id: 'hot',
-    label: 'Hot Streaks',
-    icon: TrendingUp,
-    count: 12,
-    variant: 'profit' as const,
-  },
-  {
-    id: 'cold',
-    label: 'Cold Streaks',
-    icon: TrendingDown,
-    count: 8,
-    variant: 'loss' as const,
-  },
-  {
-    id: 'live',
-    label: 'Live Now',
-    icon: Zap,
-    count: 5,
-    variant: 'live' as const,
-  },
-  {
-    id: 'high-ev',
-    label: 'High EV (>5%)',
-    icon: Target,
-    count: 23,
-    variant: 'default' as const,
-  },
-];
+const iconMap: Record<string, any> = {
+  profit: TrendingUp,
+  live: Zap,
+  primary: Target,
+  secondary: Activity,
+};
+
+const trends = mockTrendingProps.map((trend, index) => ({
+  id: `trend-${index}`,
+  label: trend.label,
+  icon: iconMap[trend.color] || Target,
+  count: trend.count,
+  variant: trend.color as 'profit' | 'loss' | 'live' | 'default',
+}));
 
 export function TrendChips() {
   return (

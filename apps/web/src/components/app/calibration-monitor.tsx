@@ -9,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { mockCalibration } from '@/lib/mock-data';
 
 export function CalibrationMonitor() {
-  // Mock calibration data
-  const calibrationScore = 92.5;
+  const calibrationScore = mockCalibration.overall_accuracy;
   const status = calibrationScore >= 90 ? 'excellent' : calibrationScore >= 80 ? 'good' : 'fair';
 
   return (

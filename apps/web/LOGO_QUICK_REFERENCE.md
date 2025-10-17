@@ -7,7 +7,6 @@
 ## Logo Variations
 
 ```
-FULL LOGO              COMPACT               ICON ONLY           WORDMARK
 ┌──────────────────┐   ┌──────────────┐      ┌────┐             ┌──────────┐
 │ [🔷] BetterBros  │   │ [🔷] BetterBros│      │ 🔷 │             │BetterBros│
 │   Smart Props    │   │              │      └────┘             └──────────┘

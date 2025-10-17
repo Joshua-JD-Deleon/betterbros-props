@@ -15,61 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useSlipStore } from '@/lib/store/slip-store';
 import { formatOdds, formatEV } from '@/lib/utils';
-
-// Mock data for demonstration
-const mockProps = [
-  {
-    id: '1',
-    propId: 'prop-1',
-    player: 'LeBron James',
-    market: 'Points',
-    line: 27.5,
-    selection: 'Over',
-    odds: -110,
-    sportsbook: 'DraftKings',
-    probability: 0.52,
-    expectedValue: 4.2,
-    sport: 'NBA',
-    league: 'NBA',
-    teams: ['Lakers', 'Warriors'],
-    startTime: '2025-10-14T19:00:00Z',
-    isLive: false,
-  },
-  {
-    id: '2',
-    propId: 'prop-2',
-    player: 'Patrick Mahomes',
-    market: 'Passing Yards',
-    line: 285.5,
-    selection: 'Over',
-    odds: 105,
-    sportsbook: 'FanDuel',
-    probability: 0.58,
-    expectedValue: 6.8,
-    sport: 'NFL',
-    league: 'NFL',
-    teams: ['Chiefs', 'Bills'],
-    startTime: '2025-10-14T20:15:00Z',
-    isLive: true,
-  },
-  {
-    id: '3',
-    propId: 'prop-3',
-    player: 'Connor McDavid',
-    market: 'Points',
-    line: 1.5,
-    selection: 'Over',
-    odds: -115,
-    sportsbook: 'BetMGM',
-    probability: 0.51,
-    expectedValue: 2.1,
-    sport: 'NHL',
-    league: 'NHL',
-    teams: ['Oilers', 'Avalanche'],
-    startTime: '2025-10-14T21:00:00Z',
-    isLive: false,
-  },
-];
+import { mockProps } from '@/lib/mock-data';
 
 export function PropsTable() {
   const [sortField, setSortField] = useState<'ev' | 'odds' | 'probability'>('ev');
@@ -88,19 +34,19 @@ export function PropsTable() {
   const handleAddToSlip = (prop: typeof mockProps[0]) => {
     addEntry({
       id: prop.id,
-      propId: prop.propId,
-      market: prop.market,
-      selection: `${prop.player} ${prop.selection} ${prop.line}`,
-      odds: prop.odds,
+      propId: prop.id,
+      market: prop.stat_type,
+      selection: `${prop.player} Over ${prop.line}`,
+      odds: prop.over_odds,
       stake: 0,
-      expectedValue: prop.expectedValue,
-      probability: prop.probability,
-      sportsbook: prop.sportsbook,
+      expectedValue: prop.ev,
+      probability: prop.confidence / 100,
+      sportsbook: prop.market,
       gameInfo: {
-        sport: prop.sport,
-        league: prop.league,
-        teams: prop.teams,
-        startTime: prop.startTime,
+        sport: 'NFL',
+        league: 'NFL',
+        teams: [prop.team, prop.opponent.replace('vs ', '').replace('@ ', '')],
+        startTime: prop.game_time,
       },
     });
   };
@@ -153,7 +99,7 @@ export function PropsTable() {
         </TableHeader>
         <TableBody>
           {mockProps.map((prop, index) => {
-            const ev = formatEV(prop.expectedValue);
+            const ev = formatEV(prop.ev);
 
             return (
               <motion.tr
@@ -165,7 +111,7 @@ export function PropsTable() {
               >
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
-                    {prop.isLive && (
+                    {prop.is_live && (
                       <Badge variant="live" className="text-xs">
                         LIVE
                       </Badge>
@@ -174,19 +120,19 @@ export function PropsTable() {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="text-muted-foreground">{prop.market}</span>
+                  <span className="text-muted-foreground">{prop.stat_type}</span>
                 </TableCell>
                 <TableCell>
                   <span className="font-semibold">
-                    {prop.selection} {prop.line}
+                    Over {prop.line}
                   </span>
                 </TableCell>
                 <TableCell>
-                  <span className="odds-american">{formatOdds(prop.odds)}</span>
+                  <span className="odds-american">{formatOdds(prop.over_odds)}</span>
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">
-                    {(prop.probability * 100).toFixed(1)}%
+                    {prop.confidence.toFixed(1)}%
                   </span>
                 </TableCell>
                 <TableCell>
@@ -194,13 +140,13 @@ export function PropsTable() {
                 </TableCell>
                 <TableCell>
                   <span className="text-xs text-muted-foreground">
-                    {prop.sportsbook}
+                    {prop.market}
                   </span>
                 </TableCell>
                 <TableCell>
                   <div className="text-xs text-muted-foreground">
-                    <div>{prop.teams.join(' @ ')}</div>
-                    <div className="text-xs opacity-70">{prop.sport}</div>
+                    <div>{prop.team} {prop.opponent}</div>
+                    <div className="text-xs opacity-70">NFL</div>
                   </div>
                 </TableCell>
                 <TableCell>

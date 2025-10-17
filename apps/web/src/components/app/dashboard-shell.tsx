@@ -7,6 +7,7 @@ import { useSlipStore } from '@/lib/store/slip-store';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { FilterPanel } from './filter-panel';
+import { NeonLogo } from '@/components/brand';
 
 interface DashboardShellProps {
   children: ReactNode;
@@ -49,12 +50,12 @@ export function DashboardShell({ children }: DashboardShellProps) {
               <Menu className="h-5 w-5" />
             </Button>
 
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-                <TrendingUp className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold">BetterBros</span>
-            </div>
+            <NeonLogo
+              size="md"
+              intensity="medium"
+              animation="pulse"
+              className="h-8 w-auto"
+            />
           </div>
 
           <nav className="hidden items-center gap-6 md:flex">
