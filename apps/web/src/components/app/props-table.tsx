@@ -233,13 +233,15 @@ export function PropsTable({ showFilters = true }: PropsTableProps) {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <button
+                      <Button
+                        size="sm"
+                        variant="outline"
                         onClick={() => handleAddToSlip(prop)}
-                        className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-all hover:scale-105 hover:bg-primary/20 hover:shadow-md"
+                        className="rounded-full border-primary/30 bg-primary/10 text-primary hover:scale-105 hover:bg-primary/20 hover:shadow-md transition-all"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-4 w-4 mr-1" />
                         Add to Slip
-                      </button>
+                      </Button>
                     </TableCell>
                   </motion.tr>
                 );
