@@ -235,9 +235,9 @@ export function PropsTable({ showFilters = true }: PropsTableProps) {
                     <TableCell>
                       <Button
                         size="sm"
-                        variant="default"
+                        variant="outline"
                         onClick={() => handleAddToSlip(prop)}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm font-medium"
+                        className="border-border/50 hover:bg-accent/50 hover:border-border transition-colors"
                       >
                         <Plus className="h-4 w-4 mr-1" />
                         Add to Slip

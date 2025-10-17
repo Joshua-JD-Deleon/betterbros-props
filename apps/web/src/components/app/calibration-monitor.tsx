@@ -16,15 +16,14 @@ export function CalibrationMonitor() {
   const status = calibrationScore >= 90 ? 'excellent' : calibrationScore >= 80 ? 'good' : 'fair';
 
   return (
-    <button className="flex items-center gap-2 rounded-lg border bg-card px-4 py-2 text-sm transition-colors hover:bg-accent">
-      <Activity className="h-4 w-4" />
+    <button className="flex items-center gap-2 rounded-lg border border-border/50 bg-card/50 px-4 py-2 text-sm transition-colors hover:bg-accent/50 hover:border-border">
+      <Activity className="h-4 w-4 text-muted-foreground" />
       <span className="text-muted-foreground">Model Calibration:</span>
-      <Badge
-        variant={status === 'excellent' ? 'profit' : 'default'}
-        className="font-mono"
+      <span
+        className="font-mono text-sm font-medium text-foreground/90"
       >
         {calibrationScore.toFixed(1)}%
-      </Badge>
+      </span>
     </button>
   );
 }
