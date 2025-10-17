@@ -3,7 +3,7 @@ Comprehensive Pydantic models for all API request/response bodies
 """
 from datetime import datetime
 from typing import Any, Dict, List, Literal, Optional
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, model_validator
 from enum import Enum
 
 
@@ -12,10 +12,248 @@ from enum import Enum
 # ============================================================================
 
 class Sport(str, Enum):
-    NBA = "nba"
-    NFL = "nfl"
-    MLB = "mlb"
-    NHL = "nhl"
+    NBA = "NBA"
+    NFL = "NFL"
+    MLB = "MLB"
+    NHL = "NHL"
+
+
+# ============================================================================
+# Stat Types - Comprehensive definitions for all supported stats
+# See STATS_REFERENCE.md for detailed documentation
+# ============================================================================
+
+class NFLStatType(str, Enum):
+    """NFL stat types"""
+    # Passing
+    PASSING_YARDS = "Passing Yards"
+    PASSING_TDS = "Passing TDs"
+    INTERCEPTIONS = "Interceptions"
+    PASS_COMPLETIONS = "Pass Completions"
+    PASS_ATTEMPTS = "Pass Attempts"
+
+    # Rushing
+    RUSHING_YARDS = "Rushing Yards"
+    RUSHING_TDS = "Rushing TDs"
+    RUSHING_ATTEMPTS = "Rushing Attempts"
+
+    # Receiving
+    RECEPTIONS = "Receptions"
+    RECEIVING_YARDS = "Receiving Yards"
+    RECEIVING_TDS = "Receiving TDs"
+    TARGETS = "Targets"
+
+    # Defense
+    SOLO_TACKLES = "Solo Tackles"
+    ASSISTED_TACKLES = "Assisted Tackles"
+    TOTAL_TACKLES = "Total Tackles"
+    SACKS = "Sacks"
+    INTERCEPTIONS_DEF = "Interceptions Def"
+    FORCED_FUMBLES = "Forced Fumbles"
+    FUMBLE_RECOVERIES = "Fumble Recoveries"
+
+    # Kicking
+    FIELD_GOALS_MADE = "Field Goals Made"
+    EXTRA_POINTS_MADE = "Extra Points Made"
+    KICKING_POINTS = "Kicking Points"
+
+    # Combined/Special
+    ANYTIME_TD = "Anytime TD"
+    FIRST_TD = "First TD"
+    PASS_RUSH_YARDS = "Pass + Rush Yards"
+    RUSH_REC_YARDS = "Rush + Rec Yards"
+    FANTASY_POINTS = "Fantasy Points"
+
+
+class NBAStatType(str, Enum):
+    """NBA stat types"""
+    # Scoring
+    POINTS = "Points"
+    FIELD_GOALS_MADE = "Field Goals Made"
+    FIELD_GOAL_ATTEMPTS = "Field Goal Attempts"
+    THREE_POINTERS_MADE = "Three Pointers Made"
+    FREE_THROWS_MADE = "Free Throws Made"
+    FIRST_QUARTER_POINTS = "1st Quarter Points"
+
+    # Rebounding
+    REBOUNDS = "Rebounds"
+    FIRST_QUARTER_REBOUNDS = "1st Quarter Rebounds"
+
+    # Playmaking
+    ASSISTS = "Assists"
+    FIRST_QUARTER_ASSISTS = "1st Quarter Assists"
+
+    # Defense
+    STEALS = "Steals"
+    BLOCKS = "Blocks"
+
+    # Combined/Milestones
+    TURNOVERS = "Turnovers"
+    DOUBLE_DOUBLE = "Double Double"
+    TRIPLE_DOUBLE = "Triple Double"
+    FANTASY_POINTS = "Fantasy Points"
+
+
+class MLBStatType(str, Enum):
+    """MLB stat types"""
+    # Pitching
+    STRIKEOUTS = "Strikeouts"
+    HITS_ALLOWED = "Hits Allowed"
+    EARNED_RUNS = "Earned Runs"
+    OUTS = "Outs"
+    PITCHER_WALKS = "Pitcher Walks"
+    INNINGS_PITCHED = "Innings Pitched"
+    WINS = "Wins"
+
+    # Batting
+    SINGLES = "Singles"
+    DOUBLES = "Doubles"
+    TRIPLES = "Triples"
+    HOME_RUNS = "Home Runs"
+    TOTAL_BASES = "Total Bases"
+    HITS = "Hits"
+    RUNS = "Runs"
+    RBI = "RBI"
+    BATTER_WALKS = "Batter Walks"
+    STOLEN_BASES = "Stolen Bases"
+
+
+class NHLStatType(str, Enum):
+    """NHL stat types"""
+    # Skater
+    GOALS = "Goals"
+    ASSISTS = "Assists"
+    POINTS = "Points"
+    POWER_PLAY_POINTS = "Power Play Points"
+    SHOTS_ON_GOAL = "Shots on Goal"
+    BLOCKED_SHOTS = "Blocked Shots"
+    HITS = "Hits"
+    PLUS_MINUS = "Plus Minus"
+
+    # Goalie
+    SAVES = "Saves"
+    GOALS_AGAINST = "Goals Against"
+    SAVE_PERCENTAGE = "Save Percentage"
+    SHUTOUTS = "Shutouts"
+
+
+class StatCategory(str, Enum):
+    """Statistical categories across all sports"""
+    # NFL
+    PASSING = "Passing"
+    RUSHING = "Rushing"
+    RECEIVING = "Receiving"
+    DEFENSE = "Defense"
+    KICKING = "Kicking"
+    COMBINED = "Combined"
+
+    # NBA
+    SCORING = "Scoring"
+    REBOUNDING = "Rebounding"
+    PLAYMAKING = "Playmaking"
+
+    # MLB
+    PITCHING = "Pitching"
+    BATTING = "Batting"
+
+    # NHL
+    SKATER = "Skater"
+    GOALIE = "Goalie"
+
+
+# Sport-specific stat type mappings
+SPORT_STAT_TYPES = {
+    Sport.NFL: NFLStatType,
+    Sport.NBA: NBAStatType,
+    Sport.MLB: MLBStatType,
+    Sport.NHL: NHLStatType,
+}
+
+# Stat category mappings
+STAT_CATEGORIES = {
+    Sport.NFL: {
+        StatCategory.PASSING: [
+            NFLStatType.PASSING_YARDS, NFLStatType.PASSING_TDS, NFLStatType.INTERCEPTIONS,
+            NFLStatType.PASS_COMPLETIONS, NFLStatType.PASS_ATTEMPTS,
+        ],
+        StatCategory.RUSHING: [
+            NFLStatType.RUSHING_YARDS, NFLStatType.RUSHING_TDS, NFLStatType.RUSHING_ATTEMPTS,
+        ],
+        StatCategory.RECEIVING: [
+            NFLStatType.RECEPTIONS, NFLStatType.RECEIVING_YARDS, NFLStatType.RECEIVING_TDS, NFLStatType.TARGETS,
+        ],
+        StatCategory.DEFENSE: [
+            NFLStatType.SOLO_TACKLES, NFLStatType.ASSISTED_TACKLES, NFLStatType.TOTAL_TACKLES,
+            NFLStatType.SACKS, NFLStatType.INTERCEPTIONS_DEF, NFLStatType.FORCED_FUMBLES, NFLStatType.FUMBLE_RECOVERIES,
+        ],
+        StatCategory.KICKING: [
+            NFLStatType.FIELD_GOALS_MADE, NFLStatType.EXTRA_POINTS_MADE, NFLStatType.KICKING_POINTS,
+        ],
+        StatCategory.COMBINED: [
+            NFLStatType.ANYTIME_TD, NFLStatType.FIRST_TD, NFLStatType.PASS_RUSH_YARDS,
+            NFLStatType.RUSH_REC_YARDS, NFLStatType.FANTASY_POINTS,
+        ],
+    },
+    Sport.NBA: {
+        StatCategory.SCORING: [
+            NBAStatType.POINTS, NBAStatType.FIELD_GOALS_MADE, NBAStatType.FIELD_GOAL_ATTEMPTS,
+            NBAStatType.THREE_POINTERS_MADE, NBAStatType.FREE_THROWS_MADE, NBAStatType.FIRST_QUARTER_POINTS,
+        ],
+        StatCategory.REBOUNDING: [
+            NBAStatType.REBOUNDS, NBAStatType.FIRST_QUARTER_REBOUNDS,
+        ],
+        StatCategory.PLAYMAKING: [
+            NBAStatType.ASSISTS, NBAStatType.FIRST_QUARTER_ASSISTS,
+        ],
+        StatCategory.DEFENSE: [
+            NBAStatType.STEALS, NBAStatType.BLOCKS,
+        ],
+        StatCategory.COMBINED: [
+            NBAStatType.TURNOVERS, NBAStatType.DOUBLE_DOUBLE, NBAStatType.TRIPLE_DOUBLE, NBAStatType.FANTASY_POINTS,
+        ],
+    },
+    Sport.MLB: {
+        StatCategory.PITCHING: [
+            MLBStatType.STRIKEOUTS, MLBStatType.HITS_ALLOWED, MLBStatType.EARNED_RUNS,
+            MLBStatType.OUTS, MLBStatType.PITCHER_WALKS, MLBStatType.INNINGS_PITCHED, MLBStatType.WINS,
+        ],
+        StatCategory.BATTING: [
+            MLBStatType.SINGLES, MLBStatType.DOUBLES, MLBStatType.TRIPLES, MLBStatType.HOME_RUNS,
+            MLBStatType.TOTAL_BASES, MLBStatType.HITS, MLBStatType.RUNS, MLBStatType.RBI,
+            MLBStatType.BATTER_WALKS, MLBStatType.STOLEN_BASES,
+        ],
+    },
+    Sport.NHL: {
+        StatCategory.SKATER: [
+            NHLStatType.GOALS, NHLStatType.ASSISTS, NHLStatType.POINTS, NHLStatType.POWER_PLAY_POINTS,
+            NHLStatType.SHOTS_ON_GOAL, NHLStatType.BLOCKED_SHOTS, NHLStatType.HITS, NHLStatType.PLUS_MINUS,
+        ],
+        StatCategory.GOALIE: [
+            NHLStatType.SAVES, NHLStatType.GOALS_AGAINST, NHLStatType.SAVE_PERCENTAGE, NHLStatType.SHUTOUTS,
+        ],
+    },
+}
+
+
+def validate_stat_type_for_sport(sport: Sport, stat_type: str) -> bool:
+    """Validate that a stat type is valid for the given sport"""
+    stat_enum = SPORT_STAT_TYPES.get(sport)
+    if not stat_enum:
+        return False
+    try:
+        stat_enum(stat_type)
+        return True
+    except ValueError:
+        return False
+
+
+def get_category_for_stat(sport: Sport, stat_type: str) -> Optional[StatCategory]:
+    """Get the category for a given stat type"""
+    sport_categories = STAT_CATEGORIES.get(sport, {})
+    for category, stats in sport_categories.items():
+        if any(s.value == stat_type for s in stats):
+            return category
+    return None
 
 
 class PropType(str, Enum):
@@ -99,7 +337,9 @@ class PropLeg(BaseModel):
     id: str
     player_id: str
     player_name: str
-    stat_type: str = Field(..., description="e.g., 'points', 'rebounds', 'assists'")
+    sport: Sport
+    stat_type: str = Field(..., description="Stat type - must be valid for the sport. See STATS_REFERENCE.md")
+    stat_category: Optional[StatCategory] = Field(None, description="Stat category for filtering")
     line: float = Field(..., description="The line value")
     direction: BetDirection
     odds: Optional[float] = Field(None, description="Decimal odds if available")
@@ -108,7 +348,23 @@ class PropLeg(BaseModel):
     team: str
     opponent: str
     game_id: str
-    position: Optional[str] = None
+    position: Optional[str] = Field(None, description="Player position: QB, RB, WR, PG, C, SP, etc.")
+
+    @model_validator(mode='after')
+    def validate_stat_type(self) -> 'PropLeg':
+        """Validate that stat_type is valid for the sport"""
+        if not validate_stat_type_for_sport(self.sport, self.stat_type):
+            valid_stats = [s.value for s in SPORT_STAT_TYPES[self.sport]]
+            raise ValueError(
+                f"Invalid stat_type '{self.stat_type}' for sport {self.sport.value}. "
+                f"Valid options: {', '.join(valid_stats)}"
+            )
+
+        # Auto-populate stat_category if not provided
+        if self.stat_category is None:
+            self.stat_category = get_category_for_stat(self.sport, self.stat_type)
+
+        return self
 
 
 class PropMarket(BaseModel):

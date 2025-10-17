@@ -499,6 +499,12 @@ class PropMarket(Base):
     )
 
     # Sport and time context
+    sport: Mapped[str] = mapped_column(
+        String(10),
+        nullable=False,
+        index=True,
+        comment="Sport: NFL, NBA, MLB, NHL",
+    )
     week: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     league: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     season: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
@@ -515,6 +521,11 @@ class PropMarket(Base):
         nullable=False,
         index=True,
     )
+    position: Mapped[Optional[str]] = mapped_column(
+        String(10),
+        nullable=True,
+        comment="Player position: QB, RB, WR, PG, C, SP, etc.",
+    )
     team: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     opponent: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
@@ -523,7 +534,13 @@ class PropMarket(Base):
         String(100),
         nullable=False,
         index=True,
-        comment="Stat type: points, rebounds, assists, etc.",
+        comment="Stat type: Passing Yards, Points, Strikeouts, Power Play Points, etc. See STATS_REFERENCE.md for all supported stats",
+    )
+    stat_category: Mapped[Optional[str]] = mapped_column(
+        String(50),
+        nullable=True,
+        index=True,
+        comment="Stat category: Passing, Scoring, Pitching, Skater, etc.",
     )
     line: Mapped[float] = mapped_column(
         Float,
@@ -590,20 +607,26 @@ class PropMarket(Base):
 
     # Indexes
     __table_args__ = (
+        Index("idx_prop_markets_sport", "sport"),
         Index("idx_prop_markets_week_league", "week", "league"),
         Index("idx_prop_markets_player_name", "player_name"),
         Index("idx_prop_markets_market_type", "market_type"),
+        Index("idx_prop_markets_stat_category", "stat_category"),
         Index("idx_prop_markets_platform", "platform"),
         Index("idx_prop_markets_game_date", "game_date"),
         Index("idx_prop_markets_is_active", "is_active"),
         Index("idx_prop_markets_snapshot_id", "snapshot_id"),
-        # Composite index for common queries
+        # Composite indexes for common multi-sport queries
+        Index("idx_prop_markets_sport_week", "sport", "week"),
+        Index("idx_prop_markets_sport_active", "sport", "is_active"),
+        Index("idx_prop_markets_sport_market_type", "sport", "market_type"),
+        Index("idx_prop_markets_sport_category", "sport", "stat_category"),
         Index("idx_prop_markets_week_league_player", "week", "league", "player_name"),
         Index("idx_prop_markets_platform_active", "platform", "is_active"),
     )
 
     def __repr__(self) -> str:
         return (
-            f"<PropMarket(player={self.player_name}, market={self.market_type}, "
+            f"<PropMarket(sport={self.sport}, player={self.player_name}, market={self.market_type}, "
             f"line={self.line}, platform={self.platform})>"
         )
